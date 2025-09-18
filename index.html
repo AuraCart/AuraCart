@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AuraCart - Hot Kitchen Gadgets</title>
+<meta name="description" content="Hand-picked guide to the hottest kitchen gadgets." />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{
+  --primary:#2c5aa0;--secondary:#ff9500;--success:#28a745;--danger:#dc3545;
+  --dark:#2c3e50;--light-gray:#f8f9fa;--medium-gray:#6c757d;--border:#e8eef5;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);--shadow-hover:0 4px 20px rgba(0,0,0,0.15);
+  --max-width:1200px;
+}
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;background:var(--light-gray);color:var(--dark);line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+
+/* Header */
+.header{text-align:center;margin-bottom:30px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);padding:40px 20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border:1px solid #bae6fd}
+.logo{font-size:32px;font-weight:700;color:#0369a1;margin-bottom:8px;letter-spacing:-0.5px}
+.tagline{font-size:16px;color:#0284c7;max-width:500px;margin:0 auto 30px auto;line-height:1.4;font-weight:500}
+.trust-indicators{display:flex;justify-content:center;gap:40px;margin-top:0;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:8px;font-weight:500;font-size:14px;color:#0c4a6e;transition:none}
+.trust-item i{font-size:14px;color:#0ea5e9}
+
+/* Value Proposition */
+.value-prop{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:25px;border-radius:15px;text-align:center;margin-bottom:30px;box-shadow:var(--shadow)}
+.value-prop h2{margin:0 0 10px 0;font-size:24px;font-weight:700}
+.value-prop p{margin:0;font-size:16px;opacity:0.9}
+
+/* AFFILIATE: wrapper reserves space so turning fixed doesn't jump content */
+.aff-wrap{width:100%;margin-bottom:30px;}
+
+/* affiliate container - in-flow default */
+.affiliate-notice{
+  background:#fff;padding:20px;border-radius:12px;border-left:4px solid var(--secondary);
+  margin:0 auto;box-shadow:var(--shadow);transition:all 220ms ease;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:16px;max-width:var(--max-width);
+}
+/* inner centered content so fixed mode is stable */
+.affiliate-inner{width:100%;max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:center;gap:16px;padding:0 12px;}
+
+/* visible panel content */
+.affiliate-content{display:flex;align-items:center;gap:12px}
+.affiliate-content i{font-size:28px;color:var(--secondary)}
+.affiliate-text h3{margin:0;font-size:18px;color:var(--dark);font-weight:700}
+.affiliate-text p{margin:0;color:var(--medium-gray);font-size:14px}
+
+/* collapsed label for sticky state */
+.affiliate-collapsed-label{display:none;align-items:center;gap:10px;font-weight:700}
+.affiliate-collapsed-label i{font-size:14px}
+
+/* FIXED (sticky) state: fixed at top, inner centered */
+.affiliate-notice.fixed{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:1400;
+  margin:0;
+  border-radius:0;
+  padding:8px 0;
+  background:#fff;
+  box-shadow:0 6px 22px rgba(0,0,0,0.12);
+  justify-content:center;
+}
+/* collapsed thin black bar (when fixed) */
+.affiliate-notice.fixed.collapsed{
+  background:var(--dark);
+  color:#fff;
+  padding:8px 0;
+  height:48px;
+  min-height:48px;
+  border-left:none;
+  justify-content:center;
+  align-items:center;
+}
+/* hide full content when collapsed, show small label */
+.affiliate-notice.fixed.collapsed .affiliate-content{display:none}
+.affiliate-notice.fixed.collapsed .affiliate-collapsed-label{display:flex;color:#fff}
+
+/* when fixed AND opened (expanded panel) */
+.affiliate-notice.fixed.open{
+  background:#fff;color:var(--dark);padding:16px 0;
+}
+
+/* keyboard focus */
+.affiliate-notice:focus{outline:3px solid rgba(2,132,199,0.14);outline-offset:3px}
+
+/* Products (kept same as original) */
+.products-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.products-title{font-size:28px;font-weight:700;color:var(--dark);margin:0}
+.filter-badge{background:var(--secondary);color:#fff;padding:8px 15px;border-radius:25px;font-weight:600;font-size:14px}
+.products-grid{display:grid;gap:25px;margin-bottom:40px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.product-card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:var(--shadow);transition:all 0.3s ease;position:relative;display:flex;flex-direction:column}
+.product-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover)}
+.product-image{width:100%;height:250px;object-fit:contain;background-color:var(--light-gray);cursor:zoom-in;border-radius:15px 15px 0 0}
+.product-content{padding:20px;flex-grow:1}
+.product-badge{position:absolute;top:15px;left:15px;background:var(--success);color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;z-index:2}
+.product-badge.bestseller{background:var(--danger)}
+.product-badge.choice{background:var(--primary)}
+.product-rating{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.stars{color:#ffc107;font-size:16px}
+.rating-text{color:var(--medium-gray);font-size:14px;font-weight:500}
+.product-title{font-size:20px;font-weight:700;color:var(--dark);margin:0 0 10px 0;line-height:1.3}
+.product-description{color:var(--medium-gray);font-size:15px;margin-bottom:15px;line-height:1.5}
+.product-features{margin:15px 0 20px 0}
+.product-features ul{margin:0;padding-left:0;list-style:none;display:grid;grid-template-columns:1fr;gap:10px}
+.product-features li{margin:0;font-size:14px;display:flex;align-items:center;gap:8px;color:var(--medium-gray)}
+.product-features li i{color:var(--primary);font-size:14px}
+.price-section{display:flex;align-items:center;gap:12px;margin:20px 0;flex-wrap:wrap}
+.current-price{font-size:24px;font-weight:800;color:var(--primary)}
+.original-price{font-size:16px;color:var(--medium-gray);text-decoration:line-through}
+.discount{background:var(--success);color:#fff;padding:4px 8px;border-radius:12px;font-size:12px;font-weight:700}
+.product-actions{display:flex;gap:12px;align-items:center;margin-top:20px}
+.btn-primary{background:var(--secondary);color:#fff;padding:15px 24px;border:none;border-radius:10px;font-weight:700;text-decoration:none;transition:all 0.2s ease;cursor:pointer;font-size:17px;display:inline-flex;align-items:center;gap:8px;width:100%;justify-content:center}
+.btn-primary[disabled], .btn-primary[aria-disabled="true"]{background:#ccc;cursor:not-allowed;color:#666}
+.btn-primary:hover{background:#e8860a;transform:translateY(-1px)}
+.why-picked{background:var(--light-gray);padding:15px;border-radius:10px;margin-top:20px}
+.why-picked h4{margin:0 0 8px 0;color:var(--primary);font-size:14px;font-weight:700}
+.why-picked p{margin:0;font-size:13px;color:var(--medium-gray);line-height:1.4}
+
+/* Footer */
+.footer{background:var(--dark);color:#fff;padding:40px 20px;margin-top:50px;border-radius:15px 15px 0 0}
+.footer-content{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}
+.footer-section h4{margin:0 0 15px 0;color:var(--secondary);font-size:18px}
+.footer-section p,.footer-section a{color:#bbb;text-decoration:none;margin:5px 0}
+.footer-section a:hover{color:#fff}
+.footer-bottom{text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid #444;color:#999}
+
+/* Responsive */
+@media(max-width:768px){
+.container{padding:15px}
+.logo{font-size:28px}
+.tagline{font-size:16px}
+.trust-indicators{gap:20px}
+.products-header{flex-direction:column;gap:15px;text-align:center}
+.product-content{padding:20px}
+.product-features ul{grid-template-columns:1fr;gap:8px}
+.btn-primary{padding:12px 20px;font-size:15px}
+}
+
+/* Zoom Modal */
+#imageModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:10000}
+#imageModal img{max-width:90%;max-height:90%;border-radius:10px}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="header">
+  <div class="logo">AuraCart</div>
+  <p class="tagline">Curated hot kitchen gadgets based on real reviews</p>
+  <div class="trust-indicators">
+    <div class="trust-item"><i class="fas fa-search"></i>Research-Based Picks</div>
+    <div class="trust-item"><i class="fas fa-star"></i>High-Rated Products</div>
+    <div class="trust-item"><i class="fas fa-users"></i>Customer Favorite</div>
+  </div>
+</header>
+
+<section class="value-prop">
+<h2 style="color:#003d82">Discover the Hottest Kitchen Gadgets</h2>
+<p>We research highly-rated kitchen products and customer feedback to bring you items that deliver value and fun.</p>
+</section>
+
+<!-- AFFILIATE WRAPPER: keeps placeholder height so switching to fixed doesn't jump content -->
+<div class="aff-wrap" id="affWrap">
+  <section id="affiliateNotice" class="affiliate-notice" aria-live="polite" aria-expanded="true" tabindex="0" role="button" aria-label="Affiliate disclosure toggle">
+    <div class="affiliate-inner">
+      <div class="affiliate-content" id="affiliateContent">
+        <i class="fab fa-amazon" aria-hidden="true"></i>
+        <div class="affiliate-text">
+          <h3>Amazon Affiliate Partner</h3>
+          <p>We may earn a commission from qualifying purchases at no extra cost to you</p>
+        </div>
+      </div>
+
+      <div class="affiliate-collapsed-label" id="affiliateLabel" aria-hidden="true">
+        <i class="fab fa-amazon"></i><span>Affiliate Disclosure</span> <i class="fas fa-chevron-down" id="chev"></i>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="products-section">
+<div class="products-header">
+<h2 class="products-title">Top Kitchen Picks</h2>
+<div class="filter-badge">Editor's Choice</div>
+</div>
+<div class="products-grid" id="productsGrid"></div>
+</section>
+
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-section">
+<h4>About AuraCart</h4>
+<p>Curated kitchen gadgets based on customer reviews and research to help you make smart purchases.</p>
+</div>
+<div class="footer-section">
+<h4>Customer Service</h4>
+<a href="#">Contact Us</a>
+<a href="#">FAQ</a>
+<a href="#">Return Policy</a>
+<a href="#">Shipping Info</a>
+</div>
+<div class="footer-section">
+<h4>Company</h4>
+<a href="#">About Us</a>
+<a href="#">Privacy Policy</a>
+<a href="#">Terms of Service</a>
+<a href="#">Affiliate Disclosure</a>
+</div>
+<div class="footer-section">
+<h4>Connect With Us</h4>
+<a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+<a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+<a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+<a href="#"><i class="fas fa-envelope"></i> Newsletter</a>
+</div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2024 AuraCart. All rights reserved.</p>
+</div>
+</footer>
+</div>
+
+<div id="imageModal" role="dialog" aria-modal="true" aria-hidden="true">
+<img id="modalImg" src="" alt="Product zoom">
+</div>
+
+<script>
+(() => {
+  /* -------------------------
+     Product data (identical to your original)
+  ------------------------- */
+  const PRODUCTS = [
+    {
+      title:"Instant Pot Duo 7-in-1",
+      description:"A versatile 7-in-1 pressure cooker that saves time and space in your kitchen.",
+      features:["<i class='fas fa-check-circle'></i> 7-in-1 functionality", "<i class='fas fa-check-circle'></i> 13 one-touch programs", "<i class='fas fa-check-circle'></i> Stainless steel inner pot"],
+      currentPrice:"$99.99",
+      originalPrice:"$109.99",
+      discount:"18% OFF",
+      rating:4.6,
+      reviewCount:"132,062",
+      img:"img/fryer.jpg",
+      affiliate:"https://www.amazon.com/Instant-Pot-Pressure-Cooker-Sterilizer/dp/B00FLYWNYQ",
+      badge:"Best Seller",
+      badgeType:"bestseller",
+      whyPicked:"Instant Pot has a cult-like following for a reason: it's a reliable, time-saving kitchen workhorse."
+    },
+    {
+      title:"Ninja Air Fryer",
+      description:"Get crispy, golden results with minimal oil and a sleek design that fits any countertop.",
+      features:["<i class='fas fa-check-circle'></i> 5-quart capacity", "<i class='fas fa-check-circle'></i> Dehydrate & roast functions", "<i class='fas fa-check-circle'></i> Dishwasher-safe parts"],
+      currentPrice:"$139.99",
+      originalPrice:"",
+      discount:"Currently no discount",
+      rating:4.7,
+      reviewCount:"5,923",
+      img:"https://images.unsplash.com/photo-1616782352136-24e526c836a3?auto=format&fit=crop&w=1740&q=80",
+      affiliate:"",
+      badge:"Editor's Choice",
+      badgeType:"choice",
+      whyPicked:"The Ninja Air Fryer consistently delivers crispy, satisfying food without the guilt of deep-frying."
+    },
+    {
+      title:"Breville Smart Oven Pro",
+      description:"A powerful countertop oven that air fries, roasts, dehydrates, and more with smart precision.",
+      features:["<i class='fas fa-check-circle'></i> 10 cooking functions", "<i class='fas fa-check-circle'></i> Super convection setting", "<i class='fas fa-check-circle'></i> Large capacity"],
+      currentPrice:"$217.13",
+      originalPrice:"",
+      discount:"Currently no discount",
+      rating:4.5,
+      reviewCount:"10,809",
+      img:"https://images.unsplash.com/photo-1579201990266-5f560e6e22f2?auto=format&fit=crop&w=1740&q=80",
+      affiliate:"",
+      badge:"Editor's Choice",
+      badgeType:"choice",
+      whyPicked:"This smart oven is the ultimate kitchen upgrade, offering pro-level results and versatility in a compact design."
+    }
+  ];
+
+  /* -------------------------
+     Render products (unchanged behavior)
+  ------------------------- */
+  function renderProducts(){
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML='';
+    PRODUCTS.forEach(p=>{
+      const card=document.createElement('div');
+      card.className='product-card';
+      let fullStars=Math.floor(p.rating);
+      let halfStar=(p.rating%1!==0);
+      let starsHtml='';
+      for(let i=0;i<fullStars;i++){starsHtml+='<i class="fas fa-star"></i>';}
+      if(halfStar){starsHtml+='<i class="fas fa-star-half-alt"></i>';}
+      for(let i=0;i<5-fullStars-(halfStar?1:0);i++){starsHtml+='<i class="far fa-star"></i>';}
+      const actionHtml = p.affiliate
+        ? `<a href="${p.affiliate}" class="btn-primary" target="_blank" rel="noopener noreferrer"><i class="fas fa-shopping-cart"></i> View on Amazon</a>`
+        : `<button class="btn-primary" aria-disabled="true" disabled><i class="fas fa-shopping-cart"></i> View on Amazon</button>`;
+      card.innerHTML=`
+      <div class="product-badge ${p.badgeType}">${p.badge}</div>
+      <img src="${p.img}" alt="${p.title}" class="product-image zoomable">
+      <div class="product-content">
+        <div class="product-rating">
+          <div class="stars">${starsHtml}</div>
+          <span class="rating-text">${p.rating} (${p.reviewCount} reviews)</span>
+        </div>
+        <h3 class="product-title">${p.title}</h3>
+        <p class="product-description">${p.description}</p>
+        <div class="product-features">
+          <ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+        </div>
+        <div class="price-section">
+          <span class="current-price">${p.currentPrice}</span>
+          <span class="original-price">${p.originalPrice}</span>
+          <span class="discount">${p.discount}</span>
+        </div>
+        <div class="product-actions">
+          ${actionHtml}
+        </div>
+        <div class="why-picked">
+          <h4><i class="fas fa-thumbs-up" style="margin-right:5px;"></i>Why We Picked This</h4>
+          <p>${p.whyPicked}</p>
+        </div>
+      </div>`;
+      const imgEl=card.querySelector('.product-image');
+      imgEl.onerror = function(){ this.onerror=null; this.src='https://via.placeholder.com/900x600?text=No+Image'; };
+      imgEl.addEventListener('click',()=>{openImageModal(p.img,p.title);});
+      grid.appendChild(card);
+    });
+  }
+  renderProducts();
+
+  /* -------------------------
+     Image modal (keyboard ESC, backdrop click)
+  ------------------------- */
+  const imageModal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImg');
+  function openImageModal(src, alt=''){
+    modalImg.src = src;
+    modalImg.alt = alt;
+    imageModal.style.display = 'flex';
+    imageModal.setAttribute('aria-hidden','false');
+    document.addEventListener('keydown', escClose);
+  }
+  function closeImageModal(){
+    imageModal.style.display = 'none';
+    modalImg.src = '';
+    imageModal.setAttribute('aria-hidden','true');
+    document.removeEventListener('keydown', escClose);
+  }
+  function escClose(e){ if(e.key === 'Escape') closeImageModal(); }
+  imageModal.addEventListener('click', (e) => { if(e.target === imageModal) closeImageModal(); });
+
+  /* -------------------------
+     SCROLL-BASED AFFILIATE LOGIC - MUCH MORE RELIABLE
+     - Uses scroll position instead of IntersectionObserver
+     - Eliminates feedback loops and flickering
+     - More predictable on mobile
+  ------------------------- */
+  const affiliateNotice = document.getElementById('affiliateNotice');
+  const affiliateContent = document.getElementById('affiliateContent');
+  const affWrap = document.getElementById('affWrap');
+  const MANUAL_MS = 6000;
+
+  let isFixed = false;
+  let isOpen = false;
+  let manualUntil = 0;
+  let affiliateOriginalTop = null;
+  let ticking = false;
+
+  function setOpen(open){
+    isOpen = !!open;
+    if(isOpen){
+      affiliateNotice.classList.add('open');
+      affiliateNotice.classList.remove('collapsed');
+      affiliateNotice.setAttribute('aria-expanded','true');
+      affiliateContent.setAttribute('aria-hidden','false');
+      const chev = document.getElementById('chev');
+      if(chev) chev.style.transform='rotate(180deg)';
+    } else {
+      affiliateNotice.classList.remove('open');
+      affiliateNotice.classList.add('collapsed');
+      affiliateNotice.setAttribute('aria-expanded','false');
+      affiliateContent.setAttribute('aria-hidden','true');
+      const chev = document.getElementById('chev');
+      if(chev) chev.style.transform='rotate(0deg)';
+    }
+  }
+
+  function enterFixed(preserveOpen=false){
+    if(isFixed) return;
+    const rect = affiliateNotice.getBoundingClientRect();
+    affWrap.style.height = `${rect.height}px`;
+    affiliateNotice.classList.add('fixed');
+    setOpen(Boolean(preserveOpen && isOpen));
+    if(!preserveOpen) setOpen(false);
+    isFixed = true;
+  }
+
+  function exitFixed(){
+    if(!isFixed) return;
+    affiliateNotice.classList.remove('fixed','collapsed','open');
+    affiliateNotice.setAttribute('aria-expanded','true');
+    affiliateContent.setAttribute('aria-hidden','false');
+    affWrap.style.height = '';
+    isFixed = false;
+    isOpen = false;
+  }
+
+  function toggleManual(){
+    if(!isFixed) return;
+    setOpen(!isOpen);
+    manualUntil = Date.now() + MANUAL_MS;
+  }
+
+  function updateStickyState() {
+    // Get the current position of where the affiliate notice should be
+    if(affiliateOriginalTop === null) {
+      const rect = affWrap.getBoundingClientRect();
+      affiliateOriginalTop = rect.top + window.scrollY;
+    }
+
+    const scrollTop = window.scrollY;
+    const shouldBeFixed = scrollTop > affiliateOriginalTop;
+
+    if(shouldBeFixed && !isFixed) {
+      // Should become fixed
+      const preserve = Date.now() < manualUntil;
+      enterFixed(preserve);
+    } else if(!shouldBeFixed && isFixed) {
+      // Should return to normal position
+      exitFixed();
+      // Reset the original top position for next calculation
+      affiliateOriginalTop = null;
+    }
+  }
+
+  function requestTick() {
+    if(!ticking) {
+      requestAnimationFrame(updateStickyState);
+      ticking = true;
+    }
+  }
+
+  function onScroll() {
+    requestTick();
+    ticking = false;
+  }
+
+  // Event handlers for manual interaction
+  affiliateNotice.addEventListener('pointerdown', (e) => {
+    if(e.pointerType === 'mouse' || e.pointerType === 'pen') {
+      e.preventDefault();
+    }
+  });
+
+  affiliateNotice.addEventListener('click', (e) => {
+    if(isFixed){
+      e.preventDefault();
+      toggleManual();
+    }
+  });
+
+  affiliateNotice.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      if(isFixed) toggleManual();
+    }
+  });
+
+  // Handle resize events
+  window.addEventListener('resize', () => {
+    affiliateOriginalTop = null; // recalculate on resize
+    if(isFixed){
+      const rect = affiliateNotice.getBoundingClientRect();
+      affWrap.style.height = `${rect.height}px`;
+    } else {
+      affWrap.style.height = '';
+    }
+  });
+
+  // Set up scroll listener
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Initialize after a short delay to ensure layout is stable
+  setTimeout(() => {
+    const rect = affWrap.getBoundingClientRect();
+    affiliateOriginalTop = rect.top + window.scrollY;
+  }, 250);
+
+  // Ensure initial accessible state
+  affiliateNotice.setAttribute('aria-expanded','true');
+  affiliateContent.setAttribute('aria-hidden','false');
+
+})();
+</script>
+</body>
+  </html>
